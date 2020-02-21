@@ -327,19 +327,34 @@ class EdgeConnect():
                 outputs = self.inpaint_model(images, edges, masks)
                 outputs_merged = (outputs * masks) + (images * (1 - masks))
 
-            output = self.postprocess(outputs_merged)[0]
+            #output = self.postprocess(outputs_merged)[0]
             path = os.path.join(self.results_path, name)
             print(index, name)
 
-            imsave(output, path)
+            #imsave(output, path)
 
             if self.debug:
-                edges = self.postprocess(1 - edges)[0]
-                masked = self.postprocess(images * (1 - masks) + masks)[0]
+                # edges = self.postprocess(1 - edges)[0]
+                # masked = self.postprocess(images * (1 - masks) + masks)[0]
                 fname, fext = name.split('.')
 
-                imsave(edges, os.path.join(self.results_path, fname + '_edge.' + fext))
-                imsave(masked, os.path.join(self.results_path, fname + '_masked.' + fext))
+                # imsave(edges, os.path.join(self.results_path, fname + '_edge.' + fext))
+                # imsave(masked, os.path.join(self.results_path, fname + '_masked.' + fext))
+                
+                image_per_row = 2
+                if self.config.SAMPLE_SIZE <= 6:
+                    image_per_row = 1
+
+                images = stitch_images(
+                    self.postprocess(1 - edges)[0],
+                    self.postprocess(images * (1 - masks) + masks)[0],
+                    self.postprocess(outputs_merged)[0],
+                    img_per_row = image_per_row
+                )
+                
+                name = os.path.join(self.results_path, fname + ".png")
+                print('\nsaving sample ' + name)
+                images.save(name)
 
         print('\nEnd test....')
 
