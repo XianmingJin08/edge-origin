@@ -51,6 +51,7 @@ class Dataset(torch.utils.data.Dataset):
 
     def load_item(self, index):
 
+        self.input_size=176
         size = self.input_size
 
         # load image

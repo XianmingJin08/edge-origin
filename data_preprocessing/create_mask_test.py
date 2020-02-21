@@ -1,3 +1,4 @@
+import csv
 import os
 import argparse
 import numpy as np
@@ -11,10 +12,10 @@ args = parser.parse_args()
 
 test_set_num = 0
 
-with open('list_eval_partition.csv') as csvfile:
+with open('../edge-connect/list_eval_partition.csv') as csvfile:
     reader = csv.DictReader(csvfile)
     for row in reader:
-        if row['partition'] == '3':
+        if row['partition'] == '2':
             test_set_num += 1
 
 ext = {'.JPG', '.JPEG', '.PNG', '.TIF', 'TIFF'}
@@ -29,6 +30,6 @@ for root, dirs, files in os.walk(args.path):
 seed(21312)
 selected_images = []
 for i in range(0, test_set_num):
-    selected_images.append(images[int(random * 12000)])
+    selected_images.append(images[int(random() * 12000)])
 print(test_set_num)
 np.savetxt(args.output, selected_images, fmt='%s')
