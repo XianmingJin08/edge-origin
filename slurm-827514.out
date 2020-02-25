@@ -1,0 +1,15 @@
+/home/s1655829/MLP/edge-origin/src/config.py:8: YAMLLoadWarning: calling yaml.load() without Loader=... is deprecated, as the default Loader is unsafe. Please read https://msg.pyyaml.org/load for full details.
+  self._dict = yaml.load(self._yaml)
+Loading EdgeModel generator...
+Traceback (most recent call last):
+  File "test.py", line 2, in <module>
+    main(mode=2)
+  File "/home/s1655829/MLP/edge-origin/main.py", line 49, in main
+    model.load()
+  File "/home/s1655829/MLP/edge-origin/src/edge_connect.py", line 59, in load
+    self.edge_model.load()
+  File "/home/s1655829/MLP/edge-origin/src/models.py", line 47, in load
+    self.generator.load_state_dict(self.modify_key(data['generator']))
+  File "/home/s1655829/MLP/edge-origin/src/models.py", line 21, in modify_key
+    new_state_dict = OrderedDict()
+NameError: name 'OrderedDict' is not defined

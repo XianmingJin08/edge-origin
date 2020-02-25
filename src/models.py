@@ -17,6 +17,24 @@ class BaseModel(nn.Module):
         self.gen_weights_path = os.path.join(config.PATH, name + '_gen.pth')
         self.dis_weights_path = os.path.join(config.PATH, name + '_dis.pth')
 
+    def modify_key(self, state_dict):
+        new_state_dict = OrderedDict()
+        if len(self.config.GPU) > 1:
+            # add "module." if not contain
+            for k, v in state_dict.items():
+                if (not "module." in k[:7]):
+                    new_state_dict["module."+k] = v
+                else:
+                    return state_dict
+        else:
+            # remove "module." if contain
+            for k, v in state_dict.items():
+                if ("module." in k[:7]):
+                    new_state_dict[k[7:]] = v
+                else:
+                    return state_dict
+        return new_state_dict
+
     def load(self):
         if os.path.exists(self.gen_weights_path):
             print('Loading %s generator...' % self.name)
@@ -26,7 +44,7 @@ class BaseModel(nn.Module):
             else:
                 data = torch.load(self.gen_weights_path, map_location=lambda storage, loc: storage)
 
-            self.generator.load_state_dict(data['generator'])
+            self.generator.load_state_dict(self.modify_key(data['generator']))
             self.iteration = data['iteration']
 
         # load discriminator only when training
@@ -38,7 +56,7 @@ class BaseModel(nn.Module):
             else:
                 data = torch.load(self.dis_weights_path, map_location=lambda storage, loc: storage)
 
-            self.discriminator.load_state_dict(data['discriminator'])
+            self.discriminator.load_state_dict(self.modify_key(data['discriminator']))
 
     def save(self):
         print('\nsaving %s...\n' % self.name)
