@@ -113,3 +113,4 @@ data/
 mask/
 CelebAMask-HQ/
 result/
+slurm-*
