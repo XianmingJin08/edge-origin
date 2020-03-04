@@ -2,6 +2,7 @@ import os
 import torch
 import torch.nn as nn
 import torch.optim as optim
+from collections import OrderedDict
 from .networks import InpaintGenerator, EdgeGenerator, Discriminator
 from .loss import AdversarialLoss, PerceptualLoss, StyleLoss
 
